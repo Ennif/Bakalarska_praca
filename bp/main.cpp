@@ -9,7 +9,7 @@ int main() {
 
     db_connection *dbConnection = new db_connection();
     //dbConnection->connectToDatabase();
-    cout << "ahoj";
+    cout << "ahoja";
     delete dbConnection;
     }
 
