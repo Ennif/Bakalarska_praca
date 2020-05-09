@@ -8,7 +8,8 @@ using namespace std;
 int main() {
 
     db_connection *dbConnection = new db_connection();
-    dbConnection->connectToDatabase();
+    //dbConnection->connectToDatabase();
+    cout << "ahoj";
     delete dbConnection;
     }
 

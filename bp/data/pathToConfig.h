@@ -7,6 +7,6 @@
 
 #include <string>
 
-const std::string pathToConfig = "../config.json";
+const std::string pathToConfig = "data/config.json";
 
 #endif //BP_PATHTOCONFIG_H

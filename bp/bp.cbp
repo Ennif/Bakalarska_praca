@@ -84,6 +84,9 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/Database/database_local/sqlite_local_path.h">
+			<Option target="bp"/>
+		</Unit>
 		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/Database/db_connection.cpp">
 			<Option target="bp"/>
 		</Unit>
