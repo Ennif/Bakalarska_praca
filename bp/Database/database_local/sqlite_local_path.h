@@ -7,6 +7,7 @@
 
 #include <string>
 
-const std::string sqliteLocalPath = "database_local/sqlite_local";
+//set a path to your local database file
+const char* sqliteLocalPath = "Database/database_local/sqlite_local";
 
 #endif //BP_SQLITE_LOCAL_PATH_H

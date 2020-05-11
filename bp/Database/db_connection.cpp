@@ -64,7 +64,6 @@ string db_connection::getConnectionString() {
 };
 
 void db_connection::connectToDatabase() {
-
     this->initializeConnectionFromConfig();
     try {
         this->Conn = new pqxx::connection(getConnectionString());

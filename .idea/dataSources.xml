@@ -7,5 +7,11 @@
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/bp/Database/database_local/sqlite_local</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="sqlite_local [2]" uuid="e88cc618-05d7-4da1-8844-eb0d731f03f9">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/bp/Database/database_local/sqlite_local.db</jdbc-url>
+    </data-source>
   </component>
 </project>
