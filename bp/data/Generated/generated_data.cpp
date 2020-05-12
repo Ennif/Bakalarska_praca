@@ -43,7 +43,7 @@ float generated_data::floatRandomGeneratorForValues() {
 int generated_data::intRandomGeneratorForSensors() {
     random_device randomDevice;
     mt19937 mt(randomDevice());
-    uniform_int_distribution<int> dist(1,7);
+    uniform_int_distribution<int> dist(1,countOfSensors);
 
     return dist(mt);
 }
