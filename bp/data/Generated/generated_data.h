@@ -5,31 +5,19 @@
 #ifndef BP_GENERATED_DATA_H
 #define BP_GENERATED_DATA_H
 #include <utility>
+#include <ctime>
 
 using namespace std;
 
 class generated_data {
-private:
-    int countOfSensors;
-
-    float floatRandomGeneratorForValues();
-
-    int intRandomGeneratorForSensors();
-
 public:
-    generated_data(int countOfSensors);
-
     generated_data();
 
     virtual ~generated_data();
 
-    int getCountOfSensors() const;
+    int getRandomSensorData();
 
-    void setCountOfSensors(int countOfSensors);
-
-    pair<int,float> generateSensorData();
-
+    time_t getTimestamp();
 };
-
 
 #endif //BP_GENERATED_DATA_H
