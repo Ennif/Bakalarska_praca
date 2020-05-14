@@ -2,7 +2,7 @@
 // Created by sounteg on 6. 5. 2020.
 //
 
-#include "db_connection.h"
+#include "db_handler.h"
 #include <iostream>
 #include <string>
 #include <pqxx/pqxx>
@@ -12,58 +12,58 @@
 
 using json = nlohmann::json;
 
-db_connection::db_connection(const string &databaseName, const string &userName, const string &password,
-                             const string &hostAddress, const string &port) : databaseName(databaseName),
+db_handler::db_handler(const string &databaseName, const string &userName, const string &password,
+                       const string &hostAddress, const string &port) : databaseName(databaseName),
                                                                           userName(userName), password(password),
                                                                           hostAddress(hostAddress), port(port) {}
 
-const string &db_connection::getDatabaseName() const {
+const string &db_handler::getDatabaseName() const {
     return databaseName;
 }
 
-void db_connection::setDatabaseName(const string &databaseName) {
-    db_connection::databaseName = databaseName;
+void db_handler::setDatabaseName(const string &databaseName) {
+    db_handler::databaseName = databaseName;
 }
 
-const string &db_connection::getUserName() const {
+const string &db_handler::getUserName() const {
     return userName;
 }
 
-void db_connection::setUserName(const string &userName) {
-    db_connection::userName = userName;
+void db_handler::setUserName(const string &userName) {
+    db_handler::userName = userName;
 }
 
-const string &db_connection::getPassword() const {
+const string &db_handler::getPassword() const {
     return password;
 }
 
-void db_connection::setPassword(const string &password) {
-    db_connection::password = password;
+void db_handler::setPassword(const string &password) {
+    db_handler::password = password;
 }
 
-const string &db_connection::getHostAddress() const {
+const string &db_handler::getHostAddress() const {
     return hostAddress;
 }
 
-void db_connection::setHostAddress(const string &hostAddress) {
-    db_connection::hostAddress = hostAddress;
+void db_handler::setHostAddress(const string &hostAddress) {
+    db_handler::hostAddress = hostAddress;
 }
 
-const string &db_connection::getPort() const {
+const string &db_handler::getPort() const {
     return port;
 }
 
-void db_connection::setPort(const string &port) {
-    db_connection::port = port;
+void db_handler::setPort(const string &port) {
+    db_handler::port = port;
 }
 
-string db_connection::getConnectionString() {
+string db_handler::getConnectionString() {
     string connectionString = "dbname = " + getDatabaseName() + " user = " + getUserName()
             + " password = " + getPassword() + " hostaddr = " + getHostAddress() + " port = " + getPort() + "";
     return connectionString;
 };
 
-void db_connection::connectToDatabase() {
+void db_handler::connectToDatabase() {
     this->initializeConnectionFromConfig();
 
     this->Conn = new pqxx::connection(getConnectionString());
@@ -74,7 +74,7 @@ void db_connection::connectToDatabase() {
     }
 }
 
-void db_connection::initializeConnectionFromConfig() {
+void db_handler::initializeConnectionFromConfig() {
     ifstream inFile(pathToConfig);
     json jsonFile = json::parse(inFile);
 
@@ -85,19 +85,31 @@ void db_connection::initializeConnectionFromConfig() {
     this->setPort(jsonFile["port"]);
 }
 
-void db_connection::closeDbConnection() {
+void db_handler::closeDbConnection() {
     this->Conn->close();
 }
 
-db_connection::~db_connection() {
+db_handler::~db_handler() {
     delete this->Conn;
     cout << "\nDeleted Conn";
 }
 
-pqxx::connection *db_connection::getConn() const {
+pqxx::connection *db_handler::getConn() const {
     return Conn;
 }
 
-void db_connection::insertSensorData() {
+const string &db_handler::getTableName() const {
+    return table_name;
+}
 
+void db_handler::setTableName(const string &tableName) {
+    table_name = tableName;
+}
+
+const vector<string> &db_handler::getColumnNames() const {
+    return column_names;
+}
+
+void db_handler::setColumnNames(const vector<string> &columnNames) {
+    column_names = columnNames;
 }

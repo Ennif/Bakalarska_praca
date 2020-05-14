@@ -2,14 +2,14 @@
 // Created by sounteg on 6. 5. 2020.
 //
 
-#ifndef BP_DB_CONNECTION_H
-#define BP_DB_CONNECTION_H
+#ifndef BP_DB_HANDLER_H
+#define BP_DB_HANDLER_H
 #include <string>
 #include <pqxx/connection.hxx>
 
 using namespace std;
 
-class db_connection {
+class db_handler {
 
 private:
     pqxx::connection *Conn;
@@ -22,17 +22,26 @@ private:
     string password;
     string hostAddress;
     string port;
-    string table_name = "data_for_sensor";
+    string table_name = "data_from_sensor";
     vector<string> column_names = {"sensor_data","timestamp"};
 
     void initializeConnectionFromConfig();
 public:
-    db_connection(const string &databaseName, const string &userName,
-                  const string &password, const string &hostAddress,
-                  const string &port);
-    db_connection(){}
+    db_handler(const string &databaseName, const string &userName,
+               const string &password, const string &hostAddress,
+               const string &port);
 
-    virtual ~db_connection();
+    const string &getTableName() const;
+
+    void setTableName(const string &tableName);
+
+    const vector<string> &getColumnNames() const;
+
+    void setColumnNames(const vector<string> &columnNames);
+
+    db_handler(){}
+
+    virtual ~db_handler();
 
     const string &getDatabaseName() const;
 
@@ -62,4 +71,4 @@ public:
 
 };
 
-#endif //BP_DB_CONNECTION_H
+#endif //BP_DB_HANDLER_H
