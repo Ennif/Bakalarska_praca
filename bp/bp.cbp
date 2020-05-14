@@ -86,6 +86,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/CSV/csv_handler.cpp">
+			<Option target="bp"/>
+		</Unit>
+		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/CSV/csv_handler.h">
+			<Option target="bp"/>
+		</Unit>
 		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/Database/database_local/db_localDatabase.cpp">
 			<Option target="bp"/>
 		</Unit>
@@ -95,13 +101,19 @@
 		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/Database/database_local/sqlite_local_path.h">
 			<Option target="bp"/>
 		</Unit>
-		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/Database/db_connection.cpp">
+		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/Database/db_handler.cpp">
 			<Option target="bp"/>
 		</Unit>
-		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/Database/db_connection.h">
+		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/Database/db_handler.h">
 			<Option target="bp"/>
 		</Unit>
 		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/Database/nlohmann/json.hpp">
+			<Option target="bp"/>
+		</Unit>
+		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/data/Generated/generated_data.cpp">
+			<Option target="bp"/>
+		</Unit>
+		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/data/Generated/generated_data.h">
 			<Option target="bp"/>
 		</Unit>
 		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/data/pathToConfig.h">

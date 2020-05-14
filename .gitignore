@@ -9,5 +9,6 @@ install_manifest.txt
 compile_commands.json
 config.json
 sqlite_local
+sensorData.csv
 CTestTestfile.cmake
 _deps
