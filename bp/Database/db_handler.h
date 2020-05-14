@@ -22,6 +22,8 @@ private:
     string password;
     string hostAddress;
     string port;
+    string table_name = "data_for_sensor";
+    vector<string> column_names = {"sensor_data","timestamp"};
 
     void initializeConnectionFromConfig();
 public:

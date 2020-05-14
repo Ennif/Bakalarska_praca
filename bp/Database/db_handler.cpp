@@ -65,15 +65,12 @@ string db_connection::getConnectionString() {
 
 void db_connection::connectToDatabase() {
     this->initializeConnectionFromConfig();
-    try {
-        this->Conn = new pqxx::connection(getConnectionString());
-        if (this->Conn->is_open()){
-            cout << "Database opened successfully " << this->Conn->dbname();
-        } else {
-            cout << "Can't open database";
-        }
-    } catch (const std::exception &e) {
-        cerr << e.what() << std::endl;
+
+    this->Conn = new pqxx::connection(getConnectionString());
+    if (this->Conn->is_open()){
+        cout << "Database opened successfully " << this->Conn->dbname();
+    } else {
+        cout << "Can't open database";
     }
 }
 
@@ -99,4 +96,8 @@ db_connection::~db_connection() {
 
 pqxx::connection *db_connection::getConn() const {
     return Conn;
+}
+
+void db_connection::insertSensorData() {
+
 }
