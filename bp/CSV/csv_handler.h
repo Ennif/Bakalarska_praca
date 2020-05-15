@@ -35,6 +35,12 @@ public:
     int pushCsvDataToDatabase();
 
     vector<string> splitCSVline(string);
+
+    int updateDataToCSVFile(vector<vector<int>>);
+
+    int getNumberOfRowsOfCSVFile();
+
+    int cleanCSV();
 };
 
 
