@@ -65,6 +65,8 @@ public:
 
     string getConnectionString();
 
+    int pushDataFromCSVToDatabase();
+
     void connectToDatabase();
 
     void closeDbConnection();

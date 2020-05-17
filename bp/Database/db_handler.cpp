@@ -9,8 +9,10 @@
 #include <fstream>
 #include "../Database/nlohmann/json.hpp"
 #include "../data/pathToConfig.h"
+#include "../CSV/csv_handler.h"
 
 using json = nlohmann::json;
+using namespace pqxx;
 
 db_handler::db_handler(const string &databaseName, const string &userName, const string &password,
                        const string &hostAddress, const string &port) : databaseName(databaseName),
@@ -112,4 +114,38 @@ const vector<string> &db_handler::getColumnNames() const {
 
 void db_handler::setColumnNames(const vector<string> &columnNames) {
     column_names = columnNames;
+}
+
+int db_handler::pushDataFromCSVToDatabase() {
+    auto *csvHandler = new csv_handler();
+    string csv_filename = csvHandler->getCsvFilename();
+    try{
+        connectToDatabase();
+        work transaction(*this->getConn());
+
+        ifstream csv_file(csv_filename);
+        if (!csv_file.is_open()){
+            cout << "File cannot be opened!\n";
+            return -1;
+        }
+        string line;
+        stream_to stream(transaction,getTableName(),getColumnNames());
+
+        while(getline(csv_file,line)){
+            vector<string> values = csvHandler->splitCSVline(line);
+
+            string value = values[0];
+            string timestamp = values[1];
+
+            stream << make_tuple(value,timestamp);
+        }
+        stream.complete();
+        transaction.commit();
+
+        csv_file.close();
+    }catch(const exception &e){
+        cout << "PQXX exception: " << e.what() << endl;
+        return -2;
+    }
+    return 0;
 }
