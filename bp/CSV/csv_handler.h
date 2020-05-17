@@ -12,7 +12,7 @@ using namespace std;
 
 class csv_handler {
 private:
-    string csv_filename = "data/sensorData.csv";
+    string csv_filename = "sensorData.csv";
     char delimiter = ',';
 
 public:
@@ -28,11 +28,7 @@ public:
 
     void setCsvFilename(const string &csvFilename);
 
-    void createCSVFile();
-
-    void writeToCSVFile(vector<vector<int>>);
-
-    int pushCsvDataToDatabase();
+    int createCSVFile();
 
     vector<string> splitCSVline(string);
 
