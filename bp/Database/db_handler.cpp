@@ -61,7 +61,7 @@ void db_handler::setPort(const string &port) {
 
 string db_handler::getConnectionString() {
     string connectionString = "dbname = " + getDatabaseName() + " user = " + getUserName()
-            + " password = " + getPassword() + " hostaddr = " + getHostAddress() + " port = " + getPort() + "";
+            + " password = " + getPassword() + " hostaddr = " + getHostAddress() + " port = " + getPort();
     return connectionString;
 };
 
@@ -125,7 +125,7 @@ int db_handler::pushDataFromCSVToDatabase() {
 
         ifstream csv_file(csv_filename);
         if (!csv_file.is_open()){
-            cout << "File cannot be opened!\n";
+            cerr << "File cannot be opened!\n";
             return -1;
         }
         string line;
@@ -143,8 +143,9 @@ int db_handler::pushDataFromCSVToDatabase() {
         transaction.commit();
 
         csv_file.close();
+        closeDbConnection();
     }catch(const exception &e){
-        cout << "PQXX exception: " << e.what() << endl;
+        cerr << "PQXX exception: " << e.what() << endl;
         return -2;
     }
     return 0;
