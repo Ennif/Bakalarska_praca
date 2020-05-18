@@ -10,14 +10,23 @@
 using namespace std;
 
 class generated_data {
+private:
+    int max_range;
 public:
-    generated_data();
+    explicit generated_data(int maxRange);
 
     virtual ~generated_data();
 
-    int getRandomSensorData();
+    float getRandomSensorData();
 
-    time_t getTimestamp();
+    static time_t getTimestamp();
+
+    int getMaxRange() const;
+
+    void setMaxRange(int maxRange);
+
+    int getRandomNum();
+
 };
 
 #endif //BP_GENERATED_DATA_H
