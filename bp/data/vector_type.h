@@ -2,6 +2,11 @@
 // Created by sounteg on 18. 5. 2020.
 //
 
+/**
+ *  dataFlag = 1 -> new data
+ *  dataFlag = 2 -> averaged data
+ */
+
 #ifndef BP_VECTOR_TYPE_H
 #define BP_VECTOR_TYPE_H
 
