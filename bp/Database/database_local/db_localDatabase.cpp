@@ -18,10 +18,6 @@ void db_localDatabase::setLocalDatabasePath(const char *localDatabasePath) {
     db_localDatabase::localDatabasePath = localDatabasePath;
 }
 
-void db_localDatabase::setDataBase(sqlite3 *dataBase) {
-    db_localDatabase::dataBase = dataBase;
-}
-
 const char *db_localDatabase::getLocalDatabasePath() const {
     return localDatabasePath;
 }
@@ -43,19 +39,19 @@ int db_localDatabase::selectCallback(void *NotUsed, int argc, char **argv, char 
     return 0;
 }
 
-int db_localDatabase::insertSenzorsData(pair<int,float> senzorValue) {
+int db_localDatabase::insertSensorsData(pair<int,float> sensorValue) {
     this->initializeLocalDatabasePath();  // if path to DB doesn't exists, it will be initialized
 
     char* messageError;
     sqlite3* database = getDataBase();
     int exit = sqlite3_open(localDatabasePath,&database);
 
-    int id_senzor = senzorValue.first;
-    float measuredValue = senzorValue.second;
+    int id_sensor = sensorValue.first;
+    float measuredValue = sensorValue.second;
     int id_meranie = 1;
 
-    string sqlInsertData("INSERT INTO hodnota (value_value, id_senzor, id_meranie) "
-              "VALUES ("+ to_string(measuredValue) + "," + to_string(id_senzor) + "," + to_string(id_meranie) + ");");
+    string sqlInsertData("INSERT INTO hodnota (value_value, id_sensor, id_meranie) "
+              "VALUES ("+ to_string(measuredValue) + "," + to_string(id_sensor) + "," + to_string(id_meranie) + ");");
     exit = sqlite3_exec(database,sqlInsertData.c_str(),NULL,0,&messageError);
 
     if(exit != SQLITE_OK){
@@ -67,19 +63,19 @@ int db_localDatabase::insertSenzorsData(pair<int,float> senzorValue) {
     return 0;
 }
 
-int db_localDatabase::selectSenzorData() {
+int db_localDatabase::selectSensorData() {
     this->initializeLocalDatabasePath();
 
     sqlite3* database = getDataBase();
     int exit = sqlite3_open(localDatabasePath,&database);
 
-    string sqlSelectDataFromSenzors = "SELECT * FROM hodnota;";
-    sqlite3_exec(database,sqlSelectDataFromSenzors.c_str(),selectCallback,NULL,NULL);
+    string sqlSelectDataFromSensors = "SELECT * FROM hodnota;";
+    sqlite3_exec(database,sqlSelectDataFromSensors.c_str(),selectCallback,NULL,NULL);
 
     return 0;
 }
 
-int db_localDatabase::deleteSenzorData() {
+int db_localDatabase::deleteSensorData() {
     this->initializeLocalDatabasePath();
 
     char* messageError;

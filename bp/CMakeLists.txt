@@ -4,10 +4,16 @@ project(bp)
 
 set(CMAKE_CXX_STANDARD 17)
 
-find_package(Boost)
-IF (Boost_FOUND)
-    include_directories(${Boost_INCLUDE_DIR})
-endif()
+if (CMAKE_BUILD_TYPE MATCHES Debug)
+    message(" ")
+    message("CMAKE IN DEBUG MODE")
+    message(" ")
+elseif(CMAKE_BUILD_TYPE MATCHES Release)
+    message(" ")
+    message("CMAKE IN RELEASE MODE")
+    message(" ")
+endif ()
+
 #modify value "NAME", when your library is stored somewhere else
 set(NAME /usr/local)
 

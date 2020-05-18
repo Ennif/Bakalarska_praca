@@ -28,15 +28,13 @@ public:
 
     void setLocalDatabasePath(const char *localDatabasePath);
 
-    void setDataBase(sqlite3 *dataBase);
+    int insertSensorsData(pair<int,float> sensorValue);
 
-    int insertSenzorsData(pair<int,float> senzorValue);
-
-    int selectSenzorData();
+    int selectSensorData();
 
     static int selectCallback(void *NotUsed, int argc, char** argv, char** azColName);
 
-    int deleteSenzorData();
+    int deleteSensorData();
 
 };
 
