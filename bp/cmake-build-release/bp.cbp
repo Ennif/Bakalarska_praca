@@ -86,6 +86,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/APP/app_handler.cpp">
+			<Option target="bp"/>
+		</Unit>
+		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/APP/app_handler.h">
+			<Option target="bp"/>
+		</Unit>
 		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/CSV/csv_handler.cpp">
 			<Option target="bp"/>
 		</Unit>
@@ -117,6 +123,9 @@
 			<Option target="bp"/>
 		</Unit>
 		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/data/pathToConfig.h">
+			<Option target="bp"/>
+		</Unit>
+		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/data/vector_type.h">
 			<Option target="bp"/>
 		</Unit>
 		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/main.cpp">
