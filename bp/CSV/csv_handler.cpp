@@ -6,17 +6,14 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
-#include <pqxx/pqxx>
-#include "../Database/db_handler.h"
 
 using namespace std;
-using namespace pqxx;
 
 csv_handler::csv_handler(const string &csvFilename) : csv_filename(csvFilename) {}
 
-csv_handler::~csv_handler() {}
+csv_handler::~csv_handler() = default;
 
-csv_handler::csv_handler() {}
+csv_handler::csv_handler() = default;
 
 char csv_handler::getDelimiter() const {
     return delimiter;
@@ -50,14 +47,14 @@ vector<string> csv_handler::splitCSVline(string line){
             result.push_back(word);
             word = "";
         }else{
-            word = word + letter;
+            word += letter;
         }
     }
     result.push_back(word);
     return result;
 }
 
-int csv_handler::updateDataToCSVFile(vector<vector<int>> data) {
+int csv_handler::updateDataToCSVFile(vector<sensorDataType> data) {
     fstream csv_file(csv_filename, ios::in | ios::app);
     if (!csv_file.is_open()) {
         cout << "Error while opening the file for update\n" << endl;
@@ -66,18 +63,10 @@ int csv_handler::updateDataToCSVFile(vector<vector<int>> data) {
     else
         cout << "File for update opened successfully\n" << endl;
 
-    for (int i = 0; i < data.size(); ++i) {
-        for (int j = 0; j < data.at(i).size(); ++j) {
-
-            csv_file << data.at(i).at(j);
-            if( j != data.at(i).size() -1 ){
-                csv_file << ",";
-            }
-        }
-        if(i != data.size()){
-            csv_file << "\n";
-        }
+    for (auto & item : data) {
+        csv_file << item.sensorData << delimiter << item.timeStamp << "\n";
     }
+
     csv_file.close();
     return 0;
 

@@ -6,6 +6,7 @@
 #define BP_CSV_HANDLER_H
 #include <string>
 #include <vector>
+#include "../data/vector_type.h"
 
 
 using namespace std;
@@ -32,11 +33,13 @@ public:
 
     vector<string> splitCSVline(string);
 
-    int updateDataToCSVFile(vector<vector<int>>);
+    int updateDataToCSVFile(vector<sensorDataType>);
 
     int getNumberOfRowsOfCSVFile();
 
     int cleanCSV();
+
+    bool areAllRowsWithAverageFlag();
 };
 
 
