@@ -120,7 +120,7 @@ configuration app_handler::initializeVariablesFromConfig() {
     return *conf;
 }
 
-void app_handler::createCSVFile(csv_handler csvHandler){
+void app_handler::createCSVFile(csv_handler &csvHandler){
     for(int i = 0 ;i < 10;i++){
         if(csvHandler.createCSVFile() == -1){
             cerr << "File cannot be created! Trying to create again\n";
@@ -132,15 +132,14 @@ void app_handler::createCSVFile(csv_handler csvHandler){
     csvHandler.cleanCSV();
 }
 
-void app_handler::pushingToDatabaseStage(db_handler dbHandler, csv_handler csvHandler, milliseconds sleep) {
+void app_handler::pushingToDatabaseStage(db_handler &dbHandler, csv_handler &csvHandler, milliseconds sleep) {
     int checkPushData = dbHandler.pushDataFromCSVToDatabase();
 
     if(checkPushData == -1){
         sleep_for(sleep);
 
     }else if(checkPushData == -2){
-        // - Increasing CSV_THRESHOLD till data will be pushed <-- not good for performance
-        // \ Average Data in CSV, when there isn't connection to DB <-- better option
+
         if(csvHandler.areAllRowsWithAverageFlag()){
             csvHandler.cleanCSV();
         }else{
@@ -153,10 +152,8 @@ void app_handler::pushingToDatabaseStage(db_handler dbHandler, csv_handler csvHa
 
 }
 
-void app_handler::pushingToStackStage(csv_handler csvHandler, vector<sensorDataType> &stackData) {
+void app_handler::pushingToStackStage(csv_handler &csvHandler, vector<sensorDataType> &stackData) {
     if(stackData.size() == STACK_THRESHOLD){
-
-        cout << this->counter << endl;
 
         int checkUpdateCSV = csvHandler.updateDataToCSVFile(stackData);
 
@@ -168,7 +165,6 @@ void app_handler::pushingToStackStage(csv_handler csvHandler, vector<sensorDataT
             }
         }else{
             stackData.clear();
-            csvHandler.cleanCSV();
         }
     }
 }
@@ -196,35 +192,16 @@ int app_handler::mainProgram() {
             if(counter == 100000){
                 break;
             }
-            /*for(int i = 0;i<10;i++){
-                sensorDataType temp(generatedData->getRandomSensorData(),generatedData->getTimestamp(),1);
-                first_sensor.emplace_back(temp);
-            }*/
-
             pushingToStackStage(*csvHandler,first_sensor);
             pushingToStackStage(*csvHandler,second_sensor);
 
             // filling stacks -- maybe add sleep function.
-            if (counter % 10 == 0) {
+            if (counter % 100 == 0) {
                 sensorDataType temp(generatedData->getRandomSensorData(),generatedData->getTimestamp(),1);
                 second_sensor.emplace_back(temp);
-                cout << "first sensor size: " << first_sensor.size() << endl;
-                cout << "second sensor size: " << second_sensor.size() << endl;
             }
             sensorDataType temp(generatedData->getRandomSensorData(),generatedData->getTimestamp(),1);
             first_sensor.emplace_back(temp);
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

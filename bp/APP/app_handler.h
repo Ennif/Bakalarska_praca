@@ -33,6 +33,14 @@ private:
 
     static vector<sensorDataType> getDataToMakeAverage(vector<sensorDataType>);
 
+    configuration initializeVariablesFromConfig();
+
+    void createCSVFile(csv_handler&);
+
+    void pushingToDatabaseStage(db_handler&,csv_handler&, milliseconds);
+
+    void pushingToStackStage(csv_handler&,vector<sensorDataType>&);
+
 public:
     int getTimeForSleep() const;
 
@@ -67,14 +75,6 @@ public:
     static vector<sensorDataType> makeAverageOfData(const vector<sensorDataType>&);
 
     static vector<sensorDataType> getDataByFlag(const vector<sensorDataType>&, int data_flag);
-
-    configuration initializeVariablesFromConfig();
-
-    void createCSVFile(csv_handler);
-
-    void pushingToDatabaseStage(db_handler,csv_handler, milliseconds);
-
-    void pushingToStackStage(csv_handler,vector<sensorDataType>&);
 
 };
 
