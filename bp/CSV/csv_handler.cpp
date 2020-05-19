@@ -60,16 +60,12 @@ int csv_handler::updateDataToCSVFile(vector<sensorDataType> data) {
         cout << "Error while opening the file for update\n" << endl;
         return -1;
     }
-    else
-        cout << "File for update opened successfully\n" << endl;
 
     for (auto & item : data) {
-        csv_file << item.sensorData << delimiter << item.timeStamp << "\n";
+        csv_file << item.sensorData << delimiter << item.timeStamp << delimiter << item.dataFlag << "\n";
     }
-
     csv_file.close();
     return 0;
-
 }
 
 int csv_handler::getNumberOfRowsOfCSVFile() {
