@@ -3,15 +3,16 @@
 //
 
 #include "generated_data.h"
-#include <math.h>
-#include <iostream>
+#include <cmath>
 #include <random>
 
 using namespace std;
 
+generated_data::generated_data()= default;
+
 generated_data::generated_data(int maxRange) : max_range(maxRange) {}
 
-generated_data::~generated_data() {}
+generated_data::~generated_data() = default;
 
 int generated_data::getMaxRange() const {
     return max_range;
@@ -37,6 +38,9 @@ time_t generated_data::getTimestamp() {
 int generated_data::getRandomNum() {
     return (int)getRandomSensorData();
 }
+
+
+
 
 
 

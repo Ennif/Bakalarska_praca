@@ -13,6 +13,8 @@ class generated_data {
 private:
     int max_range;
 public:
+     generated_data();
+
     explicit generated_data(int maxRange);
 
     virtual ~generated_data();
