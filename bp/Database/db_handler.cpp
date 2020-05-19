@@ -69,10 +69,8 @@ void db_handler::connectToDatabase() {
     this->initializeConnectionFromConfig();
 
     this->Conn = new pqxx::connection(getConnectionString());
-    if (this->Conn->is_open()){
-        cout << "Database opened successfully " << this->Conn->dbname();
-    } else {
-        cout << "Can't open database";
+    if (!this->Conn->is_open()){
+        cerr << "Can't open database";
     }
 }
 
