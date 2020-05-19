@@ -13,6 +13,7 @@
 #include "../data/vector_type.h"
 #include <chrono>
 #include <thread>
+#include <math.h>
 
 
 using namespace std;
@@ -22,14 +23,14 @@ using namespace this_thread;
 
 class app_handler {
 private:
-    unsigned int CSV_THRESHOLD = 200000;
-    int STACK_THRESHOLD = 50;
+    unsigned int CSV_THRESHOLD = 999999;
+    int STACK_THRESHOLD = 1000000;
     int counter = 0;
     vector<sensorDataType> first_sensor;
     vector<sensorDataType> second_sensor;
     int timeForSleep = 2000; //milliseconds
 
-    static vector<sensorDataType> getAveragedDataFromStack(const vector<sensorDataType>&);
+    static vector<sensorDataType> getDataFromStackByFlag(const vector<sensorDataType>&, int data_flag);
 
     static vector<sensorDataType> getDataFromSensorToMakeAverage(vector<sensorDataType>);
 

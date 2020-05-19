@@ -70,95 +70,114 @@ int app_handler::mainProgram() {
     csvHandler->cleanCSV();
     //main program
     while(true) {
-        if(csvHandler->getNumberOfRowsOfCSVFile() == CSV_THRESHOLD){
+        if(csvHandler->getNumberOfRowsOfCSVFile() >= CSV_THRESHOLD){
             //pushing to database, when number of data in csv are over threshold
+            //chrono::steady_clock::time_point begin = chrono::steady_clock::now();
             int checkPushData = dbHandler->pushDataFromCSVToDatabase();
+            /*chrono::steady_clock::time_point end = chrono::steady_clock::now();
+            cout << "Time difference = " << chrono::duration_cast<chrono::milliseconds>(end - begin).count() << " [ms]" << endl;
+            cout << "Number of rows before clean: " << csvHandler->getNumberOfRowsOfCSVFile() << endl;*/
+
             if(checkPushData == -1){
                 sleep_for(sleep);
-
             }
             else if(checkPushData == -2){
                 //TODO: average data in CSV
+                //Increasing CSV_THRESHOLD till date will be pushed
                 csvHandler->cleanCSV();
-
             }
             else if(checkPushData == 0){
                 csvHandler->cleanCSV();
-
             }
         }else{
+            counter++;
+            if(counter == 1000000){
+                break;
+            }
+
+
+            // filling stacks -- maybe add sleep function.
+            if (counter % 1000 == 0) {
+                sensorDataType temp(generatedData->getRandomSensorData(),generatedData->getTimestamp(),1);
+                second_sensor.emplace_back(temp);
+            }
+            sensorDataType temp(generatedData->getRandomSensorData(),generatedData->getTimestamp(),1);
+            first_sensor.emplace_back(temp);
+
             if(first_sensor.size() == STACK_THRESHOLD){
+                cout << counter << endl;
                 int checkUpdateCSV = csvHandler->updateDataToCSVFile(first_sensor);
 
                 if(checkUpdateCSV == -1){
-                    makeAverageOfSensorsData(first_sensor);
+                    if(getDataFromStackByFlag(first_sensor,2).size() == STACK_THRESHOLD){ //extrem case
+                        first_sensor.clear();
+                    }else{
+                        first_sensor = makeAverageOfSensorsData(first_sensor);
+                    }
                 }else{
                     first_sensor.clear();
+
                 }
             }
             if(second_sensor.size() == STACK_THRESHOLD){
                 int checkUpdateCSV = csvHandler->updateDataToCSVFile(second_sensor);
 
                 if( checkUpdateCSV == -1){
-                    makeAverageOfSensorsData(second_sensor);
+                    if(getDataFromStackByFlag(second_sensor,2).size() == STACK_THRESHOLD) { //extrem case
+                        second_sensor.clear();
+                    }else{
+                        second_sensor = makeAverageOfSensorsData(second_sensor);
+                    }
                 }else{
                     second_sensor.clear();
                 }
             }
-            // filling stacks -- maybe add sleep function.
-            if (counter % 10 == 0) {
-                sensorDataType temp(generatedData->getRandomSensorData(),generatedData->getTimestamp(),1);
-                second_sensor.emplace_back(temp);
-            }
-            sensorDataType temp(generatedData->getRandomSensorData(),generatedData->getTimestamp(),1);
-            first_sensor.emplace_back(temp);
-            counter++;
-            if(counter == 1000){
-                break;
-            }
+
         }
     }
 }
 vector<sensorDataType> app_handler::getDataFromSensorToMakeAverage(vector<sensorDataType> sensor) {
-    auto *generatedData = new generated_data(sensor.size());
+    vector<sensorDataType> notAveragedData = getDataFromStackByFlag(sensor,1);
     vector<sensorDataType> temp;
-    for(int i = 0; i < 50; i++){
-        int sensorDataPositionInStack = generatedData->getRandomNum();
-        if(sensor.at(sensorDataPositionInStack).dataFlag == 2) {
-            i--;
-            continue;
-        }
-        temp.emplace_back(sensor.at(sensorDataPositionInStack));
+
+    int iterator = 50;
+    if(notAveragedData.size() < 50)
+        iterator = notAveragedData.size();
+
+    for(int i = 0; i < iterator; i++){
+        temp.emplace_back(notAveragedData.at(i));
     }
     return temp;
 }
 
 vector<sensorDataType> app_handler::makeAverageOfSensorsData(const vector<sensorDataType>& dataToMakeAverage) {
     vector<sensorDataType> dataToAverage = getDataFromSensorToMakeAverage(dataToMakeAverage);
-    vector<sensorDataType> result = getAveragedDataFromStack(dataToMakeAverage);
+    vector<sensorDataType> result = getDataFromStackByFlag(dataToMakeAverage,2);
     float randomData = 0;
     unsigned long long int timeStamp = 0;
     for(auto & data : dataToAverage){
         randomData += data.sensorData;
         timeStamp += data.timeStamp;
     }
-    float averagedData = randomData / dataToAverage.size();
+    float averagedData = floorf((randomData / dataToAverage.size())*100)/100;
     auto averagedTimeStamp = (unsigned long long int)(timeStamp / dataToAverage.size());
 
     result.emplace_back(sensorDataType(averagedData,averagedTimeStamp,2));
     return result;
 }
 
-vector<sensorDataType> app_handler::getAveragedDataFromStack(const vector<sensorDataType>& data) {
+vector<sensorDataType> app_handler::getDataFromStackByFlag(const vector<sensorDataType>& data, int data_flag) {
     vector<sensorDataType> result;
 
     for(auto &item : data){
-        if(item.dataFlag == 2){
+        if(item.dataFlag == data_flag){
             result.emplace_back(item);
         }
     }
     return result;
 }
+
+
 
 
 
