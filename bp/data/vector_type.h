@@ -11,6 +11,8 @@
 #define BP_VECTOR_TYPE_H
 
 struct sensorDataType{
+    sensorDataType() {}
+
     float sensorData;
     time_t timeStamp;
     int dataFlag;
