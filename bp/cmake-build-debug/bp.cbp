@@ -34,7 +34,6 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/usr/local/include/sqlite"/>
 					<Add directory="/usr/include/c++/7"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
 					<Add directory="/usr/include/c++/7/backward"/>
@@ -58,7 +57,6 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/usr/local/include/sqlite"/>
 					<Add directory="/usr/include/c++/7"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
 					<Add directory="/usr/include/c++/7/backward"/>
@@ -96,15 +94,6 @@
 			<Option target="bp"/>
 		</Unit>
 		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/CSV/csv_handler.h">
-			<Option target="bp"/>
-		</Unit>
-		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/Database/database_local/db_localDatabase.cpp">
-			<Option target="bp"/>
-		</Unit>
-		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/Database/database_local/db_localDatabase.h">
-			<Option target="bp"/>
-		</Unit>
-		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/Database/database_local/sqlite_local_path.h">
 			<Option target="bp"/>
 		</Unit>
 		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/Database/db_handler.cpp">
