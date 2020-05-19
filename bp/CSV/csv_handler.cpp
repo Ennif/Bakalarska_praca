@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include "../APP/app_handler.h"
 
 using namespace std;
 
@@ -92,4 +93,57 @@ int csv_handler::cleanCSV(){
     csv_file << "";
     csv_file.close();
     return 0;
+}
+
+int csv_handler::toAverageCSV() {
+    fstream csv_file(csv_filename, ios::in);
+
+    if(!csv_file.is_open()){
+        cerr << "File cannot be opened to average CSV data!\n";
+        return -1;
+    }
+    string line;
+    vector<sensorDataType> dataFromCSV;
+    sensorDataType item;
+    vector<string> row;
+
+     while(getline(csv_file,line)){
+         row = splitCSVline(line);
+         item.sensorData = stof(row[0]);
+         item.timeStamp = stoll(row[1]);
+         item.dataFlag = stoi(row[2]);
+
+         dataFromCSV.emplace_back(item);
+     }
+    csv_file.close();
+    cleanCSV();
+    vector<sensorDataType> result;
+    result = app_handler::makeAverageOfData(dataFromCSV);
+    updateDataToCSVFile(result);
+
+}
+
+bool csv_handler::areAllRowsWithAverageFlag() {
+    fstream csv_file(csv_filename, ios::in);
+
+    if(!csv_file.is_open()){
+        cerr << "File cannot be opened!\n";
+    }
+    string line;
+    vector<sensorDataType> data;
+    sensorDataType item;
+    vector<string> row;
+
+    while(getline(csv_file,line)){
+        row = splitCSVline(line);
+        item.sensorData = stof(row[0]);
+        item.timeStamp = stoull(row[1]);
+        item.dataFlag = stoi(row[2]);
+
+        data.emplace_back(item);
+    }
+    csv_file.close();
+    vector<sensorDataType> dataWithFlag2 = app_handler::getDataByFlag(data,2);
+
+    return getNumberOfRowsOfCSVFile() == dataWithFlag2.size();
 }

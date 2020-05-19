@@ -9,6 +9,7 @@
 #include "../data/vector_type.h"
 
 
+
 using namespace std;
 
 class csv_handler {
@@ -17,7 +18,7 @@ private:
     char delimiter = ',';
 
 public:
-    csv_handler(const string &csvFilename);
+    explicit csv_handler(const string &csvFilename);
 
     virtual ~csv_handler();
 
@@ -40,6 +41,8 @@ public:
     int cleanCSV();
 
     bool areAllRowsWithAverageFlag();
+
+    int toAverageCSV();
 };
 
 
