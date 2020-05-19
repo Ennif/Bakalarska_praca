@@ -11,32 +11,32 @@
 #include "../CSV/csv_handler.h"
 #include "../data/Generated/generated_data.h"
 #include "../data/vector_type.h"
+#include "../data/pathToConfig.h"
+#include "../Database/nlohmann/json.hpp"
+#include "../data/configuration.h"
 #include <chrono>
 #include <thread>
 #include <math.h>
-
 
 using namespace std;
 using namespace chrono;
 using namespace this_thread;
 
-
 class app_handler {
 private:
-    unsigned int CSV_THRESHOLD = 999999;
-    int STACK_THRESHOLD = 1000000;
+    unsigned int CSV_THRESHOLD;
+    int STACK_THRESHOLD;
     int counter = 0;
     vector<sensorDataType> first_sensor;
     vector<sensorDataType> second_sensor;
-    int timeForSleep = 2000; //milliseconds
+    int timeForSleep;
 
-    static vector<sensorDataType> getDataFromStackByFlag(const vector<sensorDataType>&, int data_flag);
-
-    static vector<sensorDataType> getDataFromSensorToMakeAverage(vector<sensorDataType>);
-
-    static vector<sensorDataType> makeAverageOfSensorsData(const vector<sensorDataType>&);
+    static vector<sensorDataType> getDataToMakeAverage(vector<sensorDataType>);
 
 public:
+    int getTimeForSleep() const;
+
+    void setTimeForSleep(int timeForSleep);
 
     int getCounter() const;
 
@@ -63,6 +63,18 @@ public:
     virtual ~app_handler();
 
     int mainProgram();
+
+    static vector<sensorDataType> makeAverageOfData(const vector<sensorDataType>&);
+
+    static vector<sensorDataType> getDataByFlag(const vector<sensorDataType>&, int data_flag);
+
+    configuration initializeVariablesFromConfig();
+
+    void createCSVFile(csv_handler);
+
+    void pushingToDatabaseStage(db_handler,csv_handler, milliseconds);
+
+    void pushingToStackStage(csv_handler,vector<sensorDataType>&);
 
 };
 

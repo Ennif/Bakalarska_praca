@@ -2,11 +2,15 @@
 // Created by sounteg on 18. 5. 2020.
 //
 
+#include <fstream>
 #include "app_handler.h"
+#include "../data/configuration.h"
+#include "../data/pathToConfig.h"
 
 using namespace std;
 using namespace chrono;
 using namespace this_thread;
+using json = nlohmann::json;
 
 app_handler::app_handler() = default;
 
@@ -26,6 +30,14 @@ const vector<sensorDataType> &app_handler::getSecondSensor() const {
 
 void app_handler::setSecondSensor(const vector<sensorDataType> &secondSensor) {
     second_sensor = secondSensor;
+}
+
+int app_handler::getTimeForSleep() const {
+    return timeForSleep;
+}
+
+void app_handler::setTimeForSleep(int timeForSleep) {
+    app_handler::timeForSleep = timeForSleep;
 }
 
 unsigned int app_handler::getCsvThreshold() const {
@@ -52,92 +64,8 @@ void app_handler::setCounter(int counter) {
     app_handler::counter = counter;
 }
 
-int app_handler::mainProgram() {
-    auto *dbHandler = new db_handler();
-    auto *csvHandler = new csv_handler();
-    auto *generatedData = new generated_data(100);
-    milliseconds sleep(2000);
-
-    //till file will be created
-    while(1){
-        if(csvHandler->createCSVFile() == -1){
-            cerr << "File cannot be created! Trying to create again\n";
-            continue;
-        }else{
-            break;
-        }
-    }
-    csvHandler->cleanCSV();
-    //main program
-    while(true) {
-        if(csvHandler->getNumberOfRowsOfCSVFile() >= CSV_THRESHOLD){
-            //pushing to database, when number of data in csv are over threshold
-            //chrono::steady_clock::time_point begin = chrono::steady_clock::now();
-            int checkPushData = dbHandler->pushDataFromCSVToDatabase();
-            /*chrono::steady_clock::time_point end = chrono::steady_clock::now();
-            cout << "Time difference = " << chrono::duration_cast<chrono::milliseconds>(end - begin).count() << " [ms]" << endl;
-            cout << "Number of rows before clean: " << csvHandler->getNumberOfRowsOfCSVFile() << endl;*/
-
-            if(checkPushData == -1){
-                sleep_for(sleep);
-            }
-            else if(checkPushData == -2){
-                //TODO: average data in CSV
-                //Increasing CSV_THRESHOLD till date will be pushed
-                csvHandler->cleanCSV();
-            }
-            else if(checkPushData == 0){
-                csvHandler->cleanCSV();
-            }
-        }else{
-            counter++;
-            if(counter == 1000000){
-                break;
-            }
-
-
-            // filling stacks -- maybe add sleep function.
-            if (counter % 1000 == 0) {
-                sensorDataType temp(generatedData->getRandomSensorData(),generatedData->getTimestamp(),1);
-                second_sensor.emplace_back(temp);
-            }
-            sensorDataType temp(generatedData->getRandomSensorData(),generatedData->getTimestamp(),1);
-            first_sensor.emplace_back(temp);
-
-            if(first_sensor.size() == STACK_THRESHOLD){
-                cout << counter << endl;
-                int checkUpdateCSV = csvHandler->updateDataToCSVFile(first_sensor);
-
-                if(checkUpdateCSV == -1){
-                    if(getDataFromStackByFlag(first_sensor,2).size() == STACK_THRESHOLD){ //extrem case
-                        first_sensor.clear();
-                    }else{
-                        first_sensor = makeAverageOfSensorsData(first_sensor);
-                    }
-                }else{
-                    first_sensor.clear();
-
-                }
-            }
-            if(second_sensor.size() == STACK_THRESHOLD){
-                int checkUpdateCSV = csvHandler->updateDataToCSVFile(second_sensor);
-
-                if( checkUpdateCSV == -1){
-                    if(getDataFromStackByFlag(second_sensor,2).size() == STACK_THRESHOLD) { //extrem case
-                        second_sensor.clear();
-                    }else{
-                        second_sensor = makeAverageOfSensorsData(second_sensor);
-                    }
-                }else{
-                    second_sensor.clear();
-                }
-            }
-
-        }
-    }
-}
-vector<sensorDataType> app_handler::getDataFromSensorToMakeAverage(vector<sensorDataType> sensor) {
-    vector<sensorDataType> notAveragedData = getDataFromStackByFlag(sensor,1);
+vector<sensorDataType> app_handler::getDataToMakeAverage(vector<sensorDataType> sensor) {
+    vector<sensorDataType> notAveragedData = getDataByFlag(sensor,1);
     vector<sensorDataType> temp;
 
     int iterator = 50;
@@ -150,9 +78,9 @@ vector<sensorDataType> app_handler::getDataFromSensorToMakeAverage(vector<sensor
     return temp;
 }
 
-vector<sensorDataType> app_handler::makeAverageOfSensorsData(const vector<sensorDataType>& dataToMakeAverage) {
-    vector<sensorDataType> dataToAverage = getDataFromSensorToMakeAverage(dataToMakeAverage);
-    vector<sensorDataType> result = getDataFromStackByFlag(dataToMakeAverage,2);
+vector<sensorDataType> app_handler::makeAverageOfData(const vector<sensorDataType>& dataToMakeAverage) {
+    vector<sensorDataType> dataToAverage = getDataToMakeAverage(dataToMakeAverage);
+    vector<sensorDataType> result = getDataByFlag(dataToMakeAverage,2);
     float randomData = 0;
     unsigned long long int timeStamp = 0;
     for(auto & data : dataToAverage){
@@ -166,7 +94,7 @@ vector<sensorDataType> app_handler::makeAverageOfSensorsData(const vector<sensor
     return result;
 }
 
-vector<sensorDataType> app_handler::getDataFromStackByFlag(const vector<sensorDataType>& data, int data_flag) {
+vector<sensorDataType> app_handler::getDataByFlag(const vector<sensorDataType>& data, int data_flag) {
     vector<sensorDataType> result;
 
     for(auto &item : data){
@@ -176,6 +104,122 @@ vector<sensorDataType> app_handler::getDataFromStackByFlag(const vector<sensorDa
     }
     return result;
 }
+
+configuration app_handler::initializeVariablesFromConfig() {
+    auto *conf = new configuration();
+
+    ifstream inFile(pathToConfig);
+    json jsonFile = json::parse(inFile);
+
+    this->setCsvThreshold(jsonFile["csv_threshold"]);
+    this->setStackThreshold(jsonFile["stack_threshold"]);
+    this->setTimeForSleep(jsonFile["sleep_time"]);
+    conf->setMaxRangeForGeneratedData(jsonFile["max_range_for_generated_data"]);
+    conf->setConnectionString(jsonFile["connection_string"]);
+
+    return *conf;
+}
+
+void app_handler::createCSVFile(csv_handler csvHandler){
+    for(int i = 0 ;i < 10;i++){
+        if(csvHandler.createCSVFile() == -1){
+            cerr << "File cannot be created! Trying to create again\n";
+            continue;
+        }else{
+            break;
+        }
+    }
+    csvHandler.cleanCSV();
+}
+
+void app_handler::pushingToDatabaseStage(db_handler dbHandler, csv_handler csvHandler, milliseconds sleep) {
+    int checkPushData = dbHandler.pushDataFromCSVToDatabase();
+
+    if(checkPushData == -1){
+        sleep_for(sleep);
+
+    }else if(checkPushData == -2){
+        // - Increasing CSV_THRESHOLD till data will be pushed <-- not good for performance
+        // \ Average Data in CSV, when there isn't connection to DB <-- better option
+        if(csvHandler.areAllRowsWithAverageFlag()){
+            csvHandler.cleanCSV();
+        }else{
+            csvHandler.toAverageCSV();
+        }
+    }
+    else if(checkPushData == 0){
+        csvHandler.cleanCSV();
+    }
+
+}
+
+void app_handler::pushingToStackStage(csv_handler csvHandler, vector<sensorDataType> &stackData) {
+    if(stackData.size() == STACK_THRESHOLD){
+
+        cout << this->counter << endl;
+
+        int checkUpdateCSV = csvHandler.updateDataToCSVFile(stackData);
+
+        if(checkUpdateCSV == -1){
+            if(getDataByFlag(stackData,2).size() == STACK_THRESHOLD){ //extrem case
+                stackData.clear();
+            }else{
+                stackData = makeAverageOfData(stackData);
+            }
+        }else{
+            stackData.clear();
+            csvHandler.cleanCSV();
+        }
+    }
+}
+
+int app_handler::mainProgram() {
+    configuration conf = initializeVariablesFromConfig();
+    auto *dbHandler = new db_handler(conf.getConnectionString());
+    auto *csvHandler = new csv_handler();
+    auto *generatedData = new generated_data(conf.getMaxRangeForGeneratedData());
+
+    milliseconds sleep(timeForSleep);
+
+    createCSVFile(*csvHandler);
+
+    /*chrono::steady_clock::time_point begin = chrono::steady_clock::now();
+    chrono::steady_clock::time_point end = chrono::steady_clock::now();
+    cout << "Time difference = " << chrono::duration_cast<chrono::milliseconds>(end - begin).count() << " [ms]" << endl;*/
+
+    //main program
+    while(true) {
+        if(csvHandler->getNumberOfRowsOfCSVFile() >= CSV_THRESHOLD){
+            pushingToDatabaseStage(*dbHandler,*csvHandler,sleep);
+        }else{
+            counter++;
+            if(counter == 100000){
+                break;
+            }
+            /*for(int i = 0;i<10;i++){
+                sensorDataType temp(generatedData->getRandomSensorData(),generatedData->getTimestamp(),1);
+                first_sensor.emplace_back(temp);
+            }*/
+
+            pushingToStackStage(*csvHandler,first_sensor);
+            pushingToStackStage(*csvHandler,second_sensor);
+
+            // filling stacks -- maybe add sleep function.
+            if (counter % 10 == 0) {
+                sensorDataType temp(generatedData->getRandomSensorData(),generatedData->getTimestamp(),1);
+                second_sensor.emplace_back(temp);
+                cout << "first sensor size: " << first_sensor.size() << endl;
+                cout << "second sensor size: " << second_sensor.size() << endl;
+            }
+            sensorDataType temp(generatedData->getRandomSensorData(),generatedData->getTimestamp(),1);
+            first_sensor.emplace_back(temp);
+        }
+    }
+}
+
+
+
+
 
 
 
