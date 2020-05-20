@@ -111,6 +111,12 @@
 		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/data/Generated/generated_data.h">
 			<Option target="bp"/>
 		</Unit>
+		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/data/configuration.cpp">
+			<Option target="bp"/>
+		</Unit>
+		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/data/configuration.h">
+			<Option target="bp"/>
+		</Unit>
 		<Unit filename="/home/sounteg/CLionProjects/Bakalarska_praca/bp/data/pathToConfig.h">
 			<Option target="bp"/>
 		</Unit>
