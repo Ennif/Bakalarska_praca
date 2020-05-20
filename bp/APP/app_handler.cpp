@@ -149,7 +149,6 @@ void app_handler::pushingToDatabaseStage(db_handler &dbHandler, csv_handler &csv
     else if(checkPushData == 0){
         csvHandler.cleanCSV();
     }
-
 }
 
 void app_handler::pushingToStackStage(csv_handler &csvHandler, vector<sensorDataType> &stackData) {
@@ -169,7 +168,7 @@ void app_handler::pushingToStackStage(csv_handler &csvHandler, vector<sensorData
     }
 }
 
-int app_handler::mainProgram() {
+void app_handler::mainProgram() {
     configuration conf = initializeVariablesFromConfig();
     auto *dbHandler = new db_handler(conf.getConnectionString());
     auto *csvHandler = new csv_handler();

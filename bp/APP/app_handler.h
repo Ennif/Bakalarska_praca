@@ -70,7 +70,7 @@ public:
 
     virtual ~app_handler();
 
-    int mainProgram();
+    void mainProgram();
 
     static vector<sensorDataType> makeAverageOfData(const vector<sensorDataType>&);
 
