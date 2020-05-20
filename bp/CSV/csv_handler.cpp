@@ -120,7 +120,7 @@ int csv_handler::toAverageCSV() {
     vector<sensorDataType> result;
     result = app_handler::makeAverageOfData(dataFromCSV);
     updateDataToCSVFile(result);
-
+    return 0;
 }
 
 bool csv_handler::areAllRowsWithAverageFlag() {
