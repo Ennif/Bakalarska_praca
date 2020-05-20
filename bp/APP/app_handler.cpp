@@ -151,7 +151,7 @@ void app_handler::pushingToDatabaseStage(db_handler &dbHandler, csv_handler &csv
     }
 }
 
-void app_handler::pushingToStackStage(csv_handler &csvHandler, vector<sensorDataType> &stackData) {
+void app_handler::pushingToCSVStage(csv_handler &csvHandler, vector<sensorDataType> &stackData) {
     if(stackData.size() == STACK_THRESHOLD){
 
         int checkUpdateCSV = csvHandler.updateDataToCSVFile(stackData);
@@ -191,8 +191,8 @@ void app_handler::mainProgram() {
             if(counter == 100000){
                 break;
             }
-            pushingToStackStage(*csvHandler,first_sensor);
-            pushingToStackStage(*csvHandler,second_sensor);
+            pushingToCSVStage(*csvHandler,first_sensor);
+            pushingToCSVStage(*csvHandler,second_sensor);
 
             // filling stacks -- maybe add sleep function.
             if (counter % 100 == 0) {

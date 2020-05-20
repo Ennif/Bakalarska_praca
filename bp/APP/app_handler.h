@@ -39,7 +39,7 @@ private:
 
     void pushingToDatabaseStage(db_handler&,csv_handler&, milliseconds);
 
-    void pushingToStackStage(csv_handler&,vector<sensorDataType>&);
+    void pushingToCSVStage(csv_handler&,vector<sensorDataType>&);
 
 public:
     int getTimeForSleep() const;
