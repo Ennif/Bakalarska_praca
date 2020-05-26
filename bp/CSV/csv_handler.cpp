@@ -56,6 +56,7 @@ vector<string> csv_handler::splitCSVline(string line){
 }
 
 int csv_handler::updateDataToCSVFile(vector<sensorDataType> data) {
+    chrono::steady_clock::time_point begin = chrono::steady_clock::now();
     fstream csv_file(csv_filename, ios::in | ios::app);
     if (!csv_file.is_open()) {
         cout << "Error while opening the file for update\n" << endl;
@@ -63,10 +64,11 @@ int csv_handler::updateDataToCSVFile(vector<sensorDataType> data) {
     }
 
     for (auto & item : data) {
-        cout << item.sensorData << delimiter << item.timeStamp << delimiter << item.dataFlag << "\n";
         csv_file << item.sensorData << delimiter << item.timeStamp << delimiter << item.dataFlag << "\n";
     }
     csv_file.close();
+    chrono::steady_clock::time_point end = chrono::steady_clock::now();
+    cout << "Time difference to pushing to CSV= " << chrono::duration_cast<chrono::milliseconds>(end - begin).count() << " [ms]" << endl;
     return 0;
 }
 

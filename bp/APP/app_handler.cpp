@@ -177,30 +177,33 @@ void app_handler::mainProgram() {
 
     createCSVFile(*csvHandler);
 
-    /*chrono::steady_clock::time_point begin = chrono::steady_clock::now();
-    chrono::steady_clock::time_point end = chrono::steady_clock::now();
-    cout << "Time difference = " << chrono::duration_cast<chrono::milliseconds>(end - begin).count() << " [ms]" << endl;*/
-
     //main program
-    while(true) {
-        if(csvHandler->getNumberOfRowsOfCSVFile() >= CSV_THRESHOLD){
-            pushingToDatabaseStage(*dbHandler,*csvHandler,sleep);
-        }else{
+    while (true) {
+        if (counter == 10) {
+            break;
+        }
+        if (csvHandler->getNumberOfRowsOfCSVFile() >= CSV_THRESHOLD) {
+            chrono::steady_clock::time_point begin = chrono::steady_clock::now();
+            pushingToDatabaseStage(*dbHandler, *csvHandler, sleep);
+            chrono::steady_clock::time_point end = chrono::steady_clock::now();
+            cout << "Time difference to pushing to database= "
+                 << chrono::duration_cast<chrono::milliseconds>(end - begin).count() << " [ms]" << endl;
             counter++;
-            if(counter == 100000){
-                break;
-            }
-            pushingToCSVStage(*csvHandler,first_sensor);
-            pushingToCSVStage(*csvHandler,second_sensor);
+        } else {
 
-            // filling stacks -- maybe add sleep function.
-            if (counter % 100 == 0) {
-                sensorDataType temp(generatedData->getRandomSensorData(),generatedData->getTimestamp(),1);
-                second_sensor.emplace_back(temp);
-            }
-            sensorDataType temp(generatedData->getRandomSensorData(),generatedData->getTimestamp(),1);
-            first_sensor.emplace_back(temp);
 
+            pushingToCSVStage(*csvHandler, first_sensor);
+            pushingToCSVStage(*csvHandler, second_sensor);
+
+
+            // filling stacks
+            while (first_sensor.size() < STACK_THRESHOLD) {
+                first_sensor.emplace_back(generatedData->getRandomSensorData(), generatedData->getTimestamp(), 1);
+                if (first_sensor.size() % 100 == 0) {
+                    second_sensor.emplace_back(generatedData->getRandomSensorData(), generatedData->getTimestamp(), 1);
+                }
+
+            }
         }
     }
 }
