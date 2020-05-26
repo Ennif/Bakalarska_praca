@@ -1,5 +1,5 @@
 //
-// Created by sounteg on 12. 5. 2020.
+// Created by Jakub Trstensky on 12. 5. 2020.
 //
 
 #include "generated_data.h"

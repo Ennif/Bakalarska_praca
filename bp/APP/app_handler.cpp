@@ -1,5 +1,5 @@
 //
-// Created by sounteg on 18. 5. 2020.
+// Created by Jakub Trstensky on 18. 5. 2020.
 //
 
 #include <fstream>
@@ -153,7 +153,6 @@ void app_handler::pushingToDatabaseStage(db_handler &dbHandler, csv_handler &csv
 
 void app_handler::pushingToCSVStage(csv_handler &csvHandler, vector<sensorDataType> &stackData) {
     if(stackData.size() == STACK_THRESHOLD){
-
         int checkUpdateCSV = csvHandler.updateDataToCSVFile(stackData);
 
         if(checkUpdateCSV == -1){
@@ -201,6 +200,7 @@ void app_handler::mainProgram() {
             }
             sensorDataType temp(generatedData->getRandomSensorData(),generatedData->getTimestamp(),1);
             first_sensor.emplace_back(temp);
+
         }
     }
 }

@@ -1,5 +1,5 @@
 //
-// Created by sounteg on 14. 5. 2020.
+// Created by Jakub Trstensky on 14. 5. 2020.
 //
 
 #ifndef BP_CSV_HANDLER_H

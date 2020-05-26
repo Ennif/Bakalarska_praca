@@ -1,5 +1,5 @@
 //
-// Created by sounteg on 18. 5. 2020.
+// Created by Jakub Trstensky on 18. 5. 2020.
 //
 
 /**

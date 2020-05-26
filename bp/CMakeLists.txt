@@ -30,3 +30,5 @@ add_executable(bp main.cpp  Database/nlohmann/json.hpp ${SERVER_DATABASE} ${DATA
 # TARGET_LINK_LIBRARIES(bp  ${PQXX_LIB} ${PQ_LIB} sqlite3)  <-- if you want sqlite3 library included in your project
 # TARGET_INCLUDE_DIRECTORIES(bp PRIVATE ${INCLUDE_DIRS})   <--  -||-
 TARGET_LINK_LIBRARIES(bp  ${PQXX_LIB} ${PQ_LIB})
+
+#Jakub Trstensky 20.5.2020

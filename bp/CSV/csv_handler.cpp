@@ -1,5 +1,5 @@
 //
-// Created by sounteg on 14. 5. 2020.
+// Created by Jakub Trstensky on 14. 5. 2020.
 //
 
 #include "csv_handler.h"
@@ -63,6 +63,7 @@ int csv_handler::updateDataToCSVFile(vector<sensorDataType> data) {
     }
 
     for (auto & item : data) {
+        cout << item.sensorData << delimiter << item.timeStamp << delimiter << item.dataFlag << "\n";
         csv_file << item.sensorData << delimiter << item.timeStamp << delimiter << item.dataFlag << "\n";
     }
     csv_file.close();

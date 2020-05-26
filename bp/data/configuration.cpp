@@ -1,5 +1,5 @@
 //
-// Created by sounteg on 19. 5. 2020.
+// Created by Jakub Trstensky on 19. 5. 2020.
 //
 
 #include "configuration.h"

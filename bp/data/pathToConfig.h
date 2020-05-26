@@ -1,5 +1,5 @@
 //
-// Created by sounteg on 7. 5. 2020.
+// Created by Jakub Trstensky on 7. 5. 2020.
 //
 
 #ifndef BP_PATHTOCONFIG_H

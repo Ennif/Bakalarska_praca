@@ -1,5 +1,5 @@
 //
-// Created by sounteg on 6. 5. 2020.
+// Created by Jakub Trstensky on 6. 5. 2020.
 //
 
 #ifndef BP_DB_HANDLER_H
